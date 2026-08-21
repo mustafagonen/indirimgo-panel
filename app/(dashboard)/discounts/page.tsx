@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
 import { CATEGORY_EMOJIS, CATEGORY_LABELS, type Discount, type DiscountCategory } from '@/lib/types'
+import CustomSelect from '@/components/ui/CustomSelect'
 
 export default function DiscountsPage() {
   const [discounts, setDiscounts] = useState<Discount[]>([])
@@ -95,28 +96,36 @@ export default function DiscountsPage() {
             onChange={e => setSearch(e.target.value)}
           />
         </div>
-        <select
-          id="discounts-category-filter"
-          className="filter-select"
-          value={categoryFilter}
-          onChange={e => setCategoryFilter(e.target.value)}
-        >
-          <option value="">Tüm Kategoriler</option>
-          {Object.entries(CATEGORY_LABELS).map(([key, label]) => (
-            <option key={key} value={key}>{CATEGORY_EMOJIS[key as DiscountCategory]} {label}</option>
-          ))}
-        </select>
-        <select
-          id="discounts-status-filter"
-          className="filter-select"
-          value={statusFilter}
-          onChange={e => setStatusFilter(e.target.value)}
-        >
-          <option value="">Tüm Durumlar</option>
-          <option value="active">✅ Aktif</option>
-          <option value="inactive">⏸ Pasif</option>
-          <option value="expired">⏰ Süresi Dolmuş</option>
-        </select>
+        <div style={{ width: 220 }}>
+          <CustomSelect
+            id="discounts-category-filter"
+            value={categoryFilter}
+            onChange={setCategoryFilter}
+            placeholder="Tüm Kategoriler"
+            options={[
+              { value: '', label: 'Tüm Kategoriler' },
+              ...Object.entries(CATEGORY_LABELS).map(([key, label]) => ({
+                value: key,
+                label: label,
+                icon: CATEGORY_EMOJIS[key as DiscountCategory],
+              })),
+            ]}
+          />
+        </div>
+        <div style={{ width: 190 }}>
+          <CustomSelect
+            id="discounts-status-filter"
+            value={statusFilter}
+            onChange={setStatusFilter}
+            placeholder="Tüm Durumlar"
+            options={[
+              { value: '', label: 'Tüm Durumlar' },
+              { value: 'active', label: 'Aktif', icon: '✅' },
+              { value: 'inactive', label: 'Pasif', icon: '⏸' },
+              { value: 'expired', label: 'Süresi Dolmuş', icon: '⏰' },
+            ]}
+          />
+        </div>
       </div>
 
       {/* Table */}

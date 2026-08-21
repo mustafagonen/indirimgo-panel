@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
 import { CATEGORY_EMOJIS, type Location, type Company } from '@/lib/types'
+import CustomSelect from '@/components/ui/CustomSelect'
 
 export default function LocationsPage() {
   const [locations, setLocations] = useState<Location[]>([])
@@ -86,24 +87,31 @@ export default function LocationsPage() {
             onChange={e => setSearch(e.target.value)}
           />
         </div>
-        <select
-          id="locations-city-filter"
-          className="filter-select"
-          value={cityFilter}
-          onChange={e => setCityFilter(e.target.value)}
-        >
-          <option value="">Tüm Şehirler</option>
-          {cities.map(c => <option key={c} value={c}>{c}</option>)}
-        </select>
-        <select
-          id="locations-company-filter"
-          className="filter-select"
-          value={companyFilter}
-          onChange={e => setCompanyFilter(e.target.value)}
-        >
-          <option value="">Tüm Firmalar</option>
-          {companies.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-        </select>
+        <div style={{ width: 180 }}>
+          <CustomSelect
+            id="locations-city-filter"
+            value={cityFilter}
+            onChange={setCityFilter}
+            placeholder="Tüm Şehirler"
+            options={[
+              { value: '', label: 'Tüm Şehirler' },
+              ...cities.map(c => ({ value: c, label: c, icon: '📌' })),
+            ]}
+          />
+        </div>
+        <div style={{ width: 200 }}>
+          <CustomSelect
+            id="locations-company-filter"
+            value={companyFilter}
+            onChange={setCompanyFilter}
+            placeholder="Tüm Firmalar"
+            searchable
+            options={[
+              { value: '', label: 'Tüm Firmalar' },
+              ...companies.map(c => ({ value: c.id, label: c.name, icon: CATEGORY_EMOJIS[c.category] })),
+            ]}
+          />
+        </div>
       </div>
 
       {/* Table */}

@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
-import { BADGE_OPTIONS, type Company, type Location } from '@/lib/types'
+import { BADGE_OPTIONS, CATEGORY_EMOJIS, type Company, type Location } from '@/lib/types'
+import CustomSelect from '@/components/ui/CustomSelect'
 
 export default function EditDiscountPage() {
   const router = useRouter()
@@ -116,23 +117,32 @@ export default function EditDiscountPage() {
           <div className="form-grid">
             <div className="form-group">
               <label className="form-label form-label-required" htmlFor="edit-disc-company">Firma</label>
-              <select id="edit-disc-company" className="form-select"
-                value={form.company_id} onChange={e => setForm({ ...form, company_id: e.target.value })}>
-                <option value="">Firma seçin...</option>
-                {companies.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-              </select>
+              <CustomSelect
+                id="edit-disc-company"
+                value={form.company_id}
+                onChange={val => setForm({ ...form, company_id: val })}
+                searchable
+                options={companies.map(c => ({
+                  value: c.id,
+                  label: c.name,
+                  icon: CATEGORY_EMOJIS[c.category],
+                }))}
+              />
             </div>
             <div className="form-group">
               <label className="form-label form-label-required" htmlFor="edit-disc-location">Lokasyon</label>
-              <select id="edit-disc-location" className="form-select"
-                value={form.location_id} onChange={e => setForm({ ...form, location_id: e.target.value })}>
-                <option value="">Lokasyon seçin...</option>
-                {filteredLocations.map(l => (
-                  <option key={l.id} value={l.id}>
-                    {l.city} — {l.address.slice(0, 40)}
-                  </option>
-                ))}
-              </select>
+              <CustomSelect
+                id="edit-disc-location"
+                value={form.location_id}
+                onChange={val => setForm({ ...form, location_id: val })}
+                searchable
+                options={filteredLocations.map(l => ({
+                  value: l.id,
+                  label: `${l.city} — ${l.address.slice(0, 30)}${l.address.length > 30 ? '...' : ''}`,
+                  sublabel: l.mall_name ? `${l.mall_name} ${l.floor ? '• ' + l.floor : ''}` : l.address,
+                  icon: '📍',
+                }))}
+              />
             </div>
           </div>
         </div>
@@ -179,11 +189,16 @@ export default function EditDiscountPage() {
             </div>
             <div className="form-group">
               <label className="form-label" htmlFor="edit-disc-badge">Badge</label>
-              <select id="edit-disc-badge" className="form-select"
-                value={form.badge} onChange={e => setForm({ ...form, badge: e.target.value })}>
-                <option value="">Badge yok</option>
-                {BADGE_OPTIONS.map(b => <option key={b} value={b}>{b}</option>)}
-              </select>
+              <CustomSelect
+                id="edit-disc-badge"
+                value={form.badge}
+                onChange={val => setForm({ ...form, badge: val })}
+                placeholder="Badge yok"
+                options={[
+                  { value: '', label: 'Badge yok' },
+                  ...BADGE_OPTIONS.map(b => ({ value: b, label: b, icon: '🔥' })),
+                ]}
+              />
             </div>
             <div className="form-group">
               <label className="form-label form-label-required" htmlFor="edit-disc-until">Bitiş Tarihi</label>

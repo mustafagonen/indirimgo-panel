@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
-import type { Company } from '@/lib/types'
+import { CATEGORY_EMOJIS, type Company } from '@/lib/types'
+import CustomSelect from '@/components/ui/CustomSelect'
 import MapPicker from '@/components/map/MapPicker'
 
 const TURKISH_CITIES = [
@@ -106,14 +107,17 @@ export default function EditLocationPage() {
           <div className="form-grid">
             <div className="form-group form-full">
               <label className="form-label form-label-required" htmlFor="edit-loc-company">Firma</label>
-              <select
+              <CustomSelect
                 id="edit-loc-company"
-                className="form-select"
                 value={form.company_id}
-                onChange={e => setForm({ ...form, company_id: e.target.value })}
-              >
-                {companies.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-              </select>
+                onChange={val => setForm({ ...form, company_id: val })}
+                searchable
+                options={companies.map(c => ({
+                  value: c.id,
+                  label: c.name,
+                  icon: CATEGORY_EMOJIS[c.category],
+                }))}
+              />
             </div>
 
             <div className="form-group form-full">
@@ -129,14 +133,17 @@ export default function EditLocationPage() {
 
             <div className="form-group">
               <label className="form-label form-label-required" htmlFor="edit-loc-city">Şehir</label>
-              <select
+              <CustomSelect
                 id="edit-loc-city"
-                className="form-select"
                 value={form.city}
-                onChange={e => setForm({ ...form, city: e.target.value })}
-              >
-                {TURKISH_CITIES.map(c => <option key={c} value={c}>{c}</option>)}
-              </select>
+                onChange={val => setForm({ ...form, city: val })}
+                searchable
+                options={TURKISH_CITIES.map(c => ({
+                  value: c,
+                  label: c,
+                  icon: '📌',
+                }))}
+              />
             </div>
 
             <div className="form-group">

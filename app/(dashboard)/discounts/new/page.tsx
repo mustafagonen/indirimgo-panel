@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
-import { BADGE_OPTIONS, type Company, type Location } from '@/lib/types'
+import { BADGE_OPTIONS, CATEGORY_EMOJIS, type Company, type Location } from '@/lib/types'
+import CustomSelect from '@/components/ui/CustomSelect'
 
 export default function NewDiscountPage() {
   const router = useRouter()
@@ -121,37 +122,36 @@ export default function NewDiscountPage() {
           <div className="form-grid">
             <div className="form-group">
               <label className="form-label form-label-required" htmlFor="disc-company">Firma</label>
-              <select
+              <CustomSelect
                 id="disc-company"
-                className="form-select"
                 value={form.company_id}
-                onChange={e => setForm({ ...form, company_id: e.target.value })}
-                required
-              >
-                <option value="">Firma seçin...</option>
-                {companies.map(c => (
-                  <option key={c.id} value={c.id}>{c.name}</option>
-                ))}
-              </select>
+                onChange={val => setForm({ ...form, company_id: val })}
+                placeholder="Firma seçin..."
+                searchable
+                options={companies.map(c => ({
+                  value: c.id,
+                  label: c.name,
+                  icon: CATEGORY_EMOJIS[c.category],
+                }))}
+              />
             </div>
 
             <div className="form-group">
               <label className="form-label form-label-required" htmlFor="disc-location">Lokasyon</label>
-              <select
+              <CustomSelect
                 id="disc-location"
-                className="form-select"
                 value={form.location_id}
-                onChange={e => setForm({ ...form, location_id: e.target.value })}
-                required
+                onChange={val => setForm({ ...form, location_id: val })}
+                placeholder="Lokasyon seçin..."
                 disabled={!form.company_id}
-              >
-                <option value="">Lokasyon seçin...</option>
-                {filteredLocations.map(l => (
-                  <option key={l.id} value={l.id}>
-                    {l.city} — {l.address.slice(0, 40)}{l.address.length > 40 ? '...' : ''}
-                  </option>
-                ))}
-              </select>
+                searchable
+                options={filteredLocations.map(l => ({
+                  value: l.id,
+                  label: `${l.city} — ${l.address.slice(0, 30)}${l.address.length > 30 ? '...' : ''}`,
+                  sublabel: l.mall_name ? `${l.mall_name} ${l.floor ? '• ' + l.floor : ''}` : l.address,
+                  icon: '📍',
+                }))}
+              />
               {form.company_id && filteredLocations.length === 0 && (
                 <div className="form-hint">
                   Bu firmaya ait lokasyon yok.{' '}
@@ -245,15 +245,16 @@ export default function NewDiscountPage() {
             {/* Badge */}
             <div className="form-group">
               <label className="form-label" htmlFor="disc-badge">Badge (Opsiyonel)</label>
-              <select
+              <CustomSelect
                 id="disc-badge"
-                className="form-select"
                 value={form.badge}
-                onChange={e => setForm({ ...form, badge: e.target.value })}
-              >
-                <option value="">Badge yok</option>
-                {BADGE_OPTIONS.map(b => <option key={b} value={b}>{b}</option>)}
-              </select>
+                onChange={val => setForm({ ...form, badge: val })}
+                placeholder="Badge yok"
+                options={[
+                  { value: '', label: 'Badge yok' },
+                  ...BADGE_OPTIONS.map(b => ({ value: b, label: b, icon: '🔥' })),
+                ]}
+              />
             </div>
 
             {/* Valid Until */}

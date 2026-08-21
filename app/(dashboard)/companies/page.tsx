@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { createClient } from '@/lib/supabase'
 import { CATEGORY_EMOJIS, CATEGORY_LABELS, type Company, type DiscountCategory } from '@/lib/types'
+import CustomSelect from '@/components/ui/CustomSelect'
 
 export default function CompaniesPage() {
   const [companies, setCompanies] = useState<Company[]>([])
@@ -82,27 +83,35 @@ export default function CompaniesPage() {
             onChange={e => setSearch(e.target.value)}
           />
         </div>
-        <select
-          id="companies-category-filter"
-          className="filter-select"
-          value={categoryFilter}
-          onChange={e => setCategoryFilter(e.target.value)}
-        >
-          <option value="">Tüm Kategoriler</option>
-          {Object.entries(CATEGORY_LABELS).map(([key, label]) => (
-            <option key={key} value={key}>{CATEGORY_EMOJIS[key as DiscountCategory]} {label}</option>
-          ))}
-        </select>
-        <select
-          id="companies-active-filter"
-          className="filter-select"
-          value={activeFilter}
-          onChange={e => setActiveFilter(e.target.value)}
-        >
-          <option value="">Tüm Durumlar</option>
-          <option value="active">Aktif</option>
-          <option value="inactive">Pasif</option>
-        </select>
+        <div style={{ width: 220 }}>
+          <CustomSelect
+            id="companies-category-filter"
+            value={categoryFilter}
+            onChange={setCategoryFilter}
+            placeholder="Tüm Kategoriler"
+            options={[
+              { value: '', label: 'Tüm Kategoriler' },
+              ...Object.entries(CATEGORY_LABELS).map(([key, label]) => ({
+                value: key,
+                label: label,
+                icon: CATEGORY_EMOJIS[key as DiscountCategory],
+              })),
+            ]}
+          />
+        </div>
+        <div style={{ width: 170 }}>
+          <CustomSelect
+            id="companies-active-filter"
+            value={activeFilter}
+            onChange={setActiveFilter}
+            placeholder="Tüm Durumlar"
+            options={[
+              { value: '', label: 'Tüm Durumlar' },
+              { value: 'active', label: 'Aktif', icon: '✅' },
+              { value: 'inactive', label: 'Pasif', icon: '⏸' },
+            ]}
+          />
+        </div>
       </div>
 
       {/* Table */}

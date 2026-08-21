@@ -1635,12 +1635,166 @@ img {
 .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .divider { height: 1px; background: var(--border); margin: 16px 0; }
 
-/* Leaflet overrides */
+/* Leaflet overrides - Clean native OpenStreetMap tiles matching mobile app */
 .leaflet-container {
-  background: #1a1730 !important;
+  background: #f8f9fa !important;
   border-radius: var(--radius-lg);
 }
 
-.leaflet-tile {
-  filter: brightness(0.8) saturate(0.8) hue-rotate(180deg) invert(1);
+/* ═══════════════════════════════════════════
+   CUSTOM SELECT COMPONENT STYLING
+═══════════════════════════════════════════ */
+.custom-select-trigger {
+  width: 100%;
+  background: var(--bg-surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 13.5px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  outline: none;
+  cursor: pointer;
+  text-align: left;
 }
+
+.custom-select-container:hover .custom-select-trigger {
+  border-color: var(--border-hover);
+}
+
+.custom-select-container.open .custom-select-trigger,
+.custom-select-trigger:focus {
+  border-color: var(--border-active);
+  box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+.custom-select-container.disabled .custom-select-trigger {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.custom-select-value {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.custom-select-placeholder {
+  color: var(--text-disabled);
+}
+
+.custom-select-arrow {
+  color: var(--text-muted);
+  font-size: 12px;
+  transition: transform var(--transition);
+}
+
+.custom-select-container.open .custom-select-arrow {
+  transform: rotate(180deg);
+  color: var(--primary);
+}
+
+.custom-select-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: #1A1730;
+  border: 1px solid var(--border-hover);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+  overflow: hidden;
+  backdrop-filter: blur(16px);
+  padding: 6px;
+}
+
+.custom-select-search {
+  padding: 6px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 4px;
+}
+
+.custom-select-search input {
+  width: 100%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 12.5px;
+  padding: 6px 10px;
+  outline: none;
+}
+
+.custom-select-search input:focus {
+  border-color: var(--primary);
+}
+
+.custom-select-options {
+  max-height: 220px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.custom-select-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+
+.custom-select-option:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.custom-select-option.selected {
+  background: rgba(0, 230, 118, 0.14);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.custom-select-icon {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.custom-select-option-label {
+  font-weight: 500;
+}
+
+.custom-select-option-sublabel {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.custom-select-checkmark {
+  margin-left: auto;
+  color: var(--primary);
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.custom-select-no-options {
+  padding: 16px;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
