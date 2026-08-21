@@ -99,7 +99,7 @@ export default function Sidebar() {
             {user?.email?.[0]?.toUpperCase() ?? 'A'}
           </div>
           <div style={{ flex: 1, overflow: 'hidden' }}>
-            <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-primary)', truncate: true }}>
+            <div className="truncate" style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-primary)' }}>
               Admin
             </div>
             <div style={{

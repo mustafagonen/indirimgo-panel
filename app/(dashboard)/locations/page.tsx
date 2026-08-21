@@ -45,7 +45,7 @@ export default function LocationsPage() {
     fetchData()
   }
 
-  const cities = [...new Set(locations.map(l => l.city))].sort()
+  const cities = Array.from(new Set(locations.map(l => l.city))).sort()
 
   const filtered = locations.filter(l => {
     const matchSearch = !search ||
